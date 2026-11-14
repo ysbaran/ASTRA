@@ -4,7 +4,7 @@
  */
 const Config = Object.freeze({
   /** Shown in the greeting. Change "you" to her name or a nickname. */
-  recipientName: "you",
+  recipientName: "Hadisa",
 
   storageKeys: Object.freeze({
     favorites: "planetPoems.favorites.v1",

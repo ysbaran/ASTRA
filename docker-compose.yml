@@ -1,13 +1,13 @@
 # Run with:  docker compose up -d --build
 # Change the port or the address it listens on with a .env file (see .env.example).
 services:
-  planet-poems:
+  astra:
     build:
       context: .
       args:
         SELF_HOST_FONTS: "1"
-    image: planet-poems:latest
-    container_name: planet-poems
+    image: astra:latest
+    container_name: astra
     restart: unless-stopped
     ports:
       # BIND_ADDRESS=127.0.0.1 keeps it private to the server (use this behind a reverse proxy).

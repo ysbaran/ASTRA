@@ -1,0 +1,76 @@
+/* Base: reset, page layout, and the small utilities everything shares. */
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html {
+  min-height: 100%;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* one focus style for everything interactive */
+:focus-visible { outline: 3px solid var(--color-pink-deep); outline-offset: 3px; }
+
+/* soft blush background with a faint dot pattern */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 40% at 12% 0%, #ffd6e3, transparent 70%),
+    radial-gradient(50% 40% at 100% 100%, #ffe2d4, transparent 70%),
+    radial-gradient(rgba(255, 92, 147, 0.09) 1.5px, transparent 1.9px) 0 0 / 28px 28px,
+    linear-gradient(#fff7f9, #ffeef3);
+}
+
+.app {
+  position: relative;
+  z-index: var(--z-content);
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.2rem 14px 3rem;
+}
+
+.screen {
+  width: min(100%, var(--content-width));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  animation: screen-in var(--dur-slow) var(--ease-out) both;
+}
+.screen:focus { outline: none; }
+
+/* utilities */
+.text-muted { color: var(--color-ink-muted); }
+.sprite { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+
+.fine-print {
+  margin: 0;
+  text-align: center;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--color-ink-muted);
+}
+.fine-print--end { margin: 0.4rem 0 6rem; }

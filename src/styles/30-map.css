@@ -1,0 +1,167 @@
+/* Map screen: greeting, the solar-system map, and the list of poems for a planet. */
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.topbar__greeting { margin: 0 0 0.1rem; font-size: 0.88rem; font-weight: 500; }
+.topbar__title { margin: 0; font-size: 2rem; font-weight: 600; line-height: 1.1; color: var(--color-pink-deep); }
+.topbar__subtitle { margin: 0.1rem 0 0; font-family: var(--font-fa); font-weight: 500; }
+
+/* ---------- the map ---------- */
+.map {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 100 / 108;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(#ffe9f0, #ffdce8);
+  box-shadow: inset 0 0 0 1.5px #fbc4d6, 0 10px 28px rgba(229, 72, 123, 0.12);
+}
+.orbits { position: absolute; inset: 0; overflow: hidden; }
+.orbit {
+  position: absolute;
+  /* left, top and width are set by map-view.js from MAP_LAYOUT */
+  aspect-ratio: 1;
+  border: 1.5px solid rgba(255, 92, 147, 0.22);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbit-in 1.2s var(--ease-out) both;
+}
+.orbit__runner { position: absolute; inset: 0; border-radius: 50%; animation: orbit-spin linear infinite; }
+.orbit__runner::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--runner-color);
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.planet-node {
+  position: absolute;
+  width: var(--size);
+  min-width: 44px;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  animation: node-in 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  animation-delay: var(--delay);
+}
+.planet-node__sprite { width: 100%; height: 100%; filter: var(--shadow-sprite); animation: float 5s ease-in-out infinite; animation-delay: var(--delay); }
+.planet-node__sprite.is-hopping { animation: hop 0.55s var(--ease-pop); }
+.planet-node::before { /* the dashed "selected" ring */
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 2px dashed var(--color-pink-deep);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(1.4);
+  transition: opacity 0.25s ease, transform 0.35s var(--ease-out);
+  animation: spin 18s linear infinite;
+}
+.planet-node[aria-pressed="true"]::before { opacity: 1; transform: none; }
+.planet-node__label {
+  position: absolute;
+  white-space: nowrap;
+  pointer-events: none;
+  font-size: 0.76rem;
+  font-weight: 500;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.planet-node[data-label="top"] .planet-node__label { left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); }
+.planet-node[data-label="bottom"] .planet-node__label { left: 50%; top: calc(100% + 8px); transform: translateX(-50%); }
+.planet-node[data-label="right"] .planet-node__label { left: calc(100% + 8px); top: 50%; transform: translateY(-50%); }
+.planet-node[aria-pressed="true"] .planet-node__label { font-weight: 600; color: var(--color-pink-deep); }
+.planet-node__today {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--color-pink-bright);
+  box-shadow: 0 0 0 2px #fff;
+  animation: pulse 2.4s ease-out infinite;
+}
+
+.rocket {
+  position: absolute;
+  width: 22px;
+  height: 28px;
+  opacity: 0;
+  pointer-events: none;
+  transform: rotate(45deg);
+  shape-rendering: crispEdges;
+  filter: drop-shadow(0 1px 0 rgba(91, 42, 63, 0.35));
+  animation: fly 22s linear infinite 4s;
+}
+
+/* ---------- the selected planet's panel ---------- */
+.destination { padding: 1.1rem 1rem 1rem; animation: screen-in 0.45s var(--ease-out) both; }
+.destination__head { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.9rem; }
+.destination__sprite { flex: none; width: 76px; height: 76px; filter: var(--shadow-sprite); animation: float 4s ease-in-out infinite; }
+.destination__bubble {
+  position: relative;
+  flex: 1;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: var(--color-blush);
+  font-weight: 500;
+  line-height: 1.35;
+  animation: pop 0.45s var(--ease-pop) both;
+}
+.destination__bubble::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  margin-top: -8px;
+  border: 8px solid transparent;
+  border-left: 0;
+  border-right-color: var(--color-blush);
+}
+.destination__name { margin: 0; font-size: 2rem; font-weight: 600; line-height: 1.1; color: var(--color-pink-deep); }
+.destination__mood { margin: 0.15rem 0 0.9rem; font-weight: 500; }
+
+.options { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.option {
+  width: 100%;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.55rem 0.9rem;
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-blush-soft);
+  box-shadow: inset 6px 0 0 var(--accent);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform var(--dur-fast) ease;
+}
+.option:hover { background: var(--color-blush); border-color: var(--color-pink); }
+.option:active { transform: scale(0.98); }
+.option__dot { flex: none; width: 10px; height: 10px; margin-left: 0.3rem; border-radius: 50%; background: var(--accent); }
+.option__text { flex: 1; min-width: 0; }
+.option__text > * { display: block; }
+.option__title { font-size: 1.08rem; font-weight: 500; line-height: 1.25; }
+.option__poet { font-size: 0.82rem; color: var(--color-ink-muted); }
+.option__verse { direction: rtl; text-align: right; margin-top: 0.1rem; font-family: var(--font-fa); font-size: 0.88rem; color: var(--color-ink-muted); }
+.option__tag { flex: none; padding: 0.2rem 0.6rem; border-radius: var(--radius-pill); background: var(--color-pink); font-size: 0.78rem; font-weight: 600; }
+.option__kept { flex: none; font-size: 1rem; color: var(--color-pink-bright); }
+.option__chevron { flex: none; font-size: 1.4rem; line-height: 1; color: var(--color-pink-deep); }
+
+@media (hover: none) {
+  .chip:hover, .dock__btn:hover, .option:hover, .keepsake:hover { border-color: var(--color-line); }
+}
+@media (max-width: 380px) {
+  .topbar__title { font-size: 1.65rem; }
+  .segmented button { min-width: 46px; padding: 0 0.6rem; }
+  .planet-node__label { font-size: 0.7rem; }
+}

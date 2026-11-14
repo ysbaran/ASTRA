@@ -1,0 +1,71 @@
+/* Poem screen: toolbar, planet header, and the poem card with its couplets. */
+
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+
+.poem-header { display: flex; align-items: center; gap: var(--space-4); }
+.poem-header__sprite { flex: none; width: 92px; height: 92px; filter: var(--shadow-sprite); animation: float 4s ease-in-out infinite; }
+.poem-header__sprite.is-hopping { animation: hop 0.6s var(--ease-pop); }
+.poem-header__name { margin: 0; font-size: 1.9rem; font-weight: 600; line-height: 1.1; color: var(--color-pink-deep); }
+.poem-header p { margin: 0.15rem 0 0; font-weight: 500; }
+
+/* ---------- the card ---------- */
+.poem-card { animation: panel-in var(--dur-slow) var(--ease-out) both; }
+.poem-card__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1.5px dashed var(--color-line);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+}
+.poem-card__body { padding: 1.4rem 1rem 1.7rem; text-align: center; }
+.poem-card__title { margin: 0; font-size: clamp(1.6rem, 7.4vw, 2rem); font-weight: 600; line-height: 1.15; }
+.poem-card__poet { margin: 0.6rem 0 0; display: flex; justify-content: center; align-items: baseline; gap: 0.8rem; font-weight: 500; color: var(--color-pink-deep); }
+.poem-card__poet-fa { font-family: var(--font-fa); font-weight: 700; font-size: 1.45rem; }
+.poem-card__note { margin: 0.3rem 0 0; font-size: 0.9rem; color: var(--color-ink-muted); }
+.poem-card__rule { height: 0; margin: 1.2rem 1.4rem; border-top: 3px dotted var(--color-line); }
+.poem-card__end { margin: 1.3rem 0 0; display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
+.poem-card__end i { width: 9px; height: 9px; border-radius: 50%; background: var(--color-pink); animation: blink 1.6s ease-in-out infinite; }
+
+/* ---------- couplets ---------- */
+.couplets { display: flex; flex-direction: column; gap: 14px; }
+.couplet {
+  padding: 1.1rem 0.8rem 1.2rem;
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  background: var(--color-blush-soft);
+  box-shadow: inset 6px 0 0 var(--accent);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--dur-slow) ease, transform var(--dur-slow) var(--ease-out), background-color 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.couplet.is-visible { opacity: 0.55; transform: none; }
+.couplet.is-visible.is-focus {
+  opacity: 1;
+  background: var(--color-surface);
+  border-color: var(--color-line);
+  box-shadow: inset 6px 0 0 var(--accent), 0 8px 20px rgba(229, 72, 123, 0.13);
+}
+.couplet__fa { direction: rtl; font-family: var(--font-fa); font-weight: 500; font-size: clamp(1.3rem, 6.2vw, 1.58rem); line-height: 2.1; }
+.couplet__en { font-size: clamp(1.04rem, 4.7vw, 1.18rem); line-height: 1.55; color: var(--color-ink-verse); }
+.couplet__sep { display: flex; justify-content: center; gap: 7px; margin: 0.7rem 0 0.8rem; }
+.couplet__sep i { width: 7px; height: 7px; border-radius: 50%; background: var(--color-pink); }
+.couplet__sep i:nth-child(2) { background: var(--color-peach); }
+.couplet__sep i:nth-child(3) { background: var(--color-lilac); }
+.line { display: block; }
+
+/* each word fades in just after the one before it */
+.word { display: inline-block; opacity: 0; transform: translateY(8px); filter: blur(3px); }
+.couplet.is-visible .word {
+  animation: word-in var(--dur-slow) var(--ease-out) forwards;
+  animation-delay: calc((var(--index) + var(--offset, 0)) * var(--word-step) + 120ms);
+}
+
+/* the language switch hides one half of each couplet */
+.poem-stage[data-language="fa"] .couplet__en,
+.poem-stage[data-language="fa"] .couplet__sep,
+.poem-stage[data-language="en"] .couplet__fa,
+.poem-stage[data-language="en"] .couplet__sep { display: none; }
+.poem-stage[data-language="en"] .couplet__en { --offset: 0 !important; }

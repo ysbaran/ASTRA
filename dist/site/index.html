@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff3f6">
+<title>Planet Poems · شعر و ستاره</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%AA%90%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.d3bd699d6e.css">
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true"></div>
+<div class="bloom" id="launch-bloom" aria-hidden="true"></div>
+
+<main class="app" id="app">
+
+  <!-- Screen 1: the map. Pick a planet, then a poem. -->
+  <section class="screen" id="screen-map" tabindex="-1" aria-label="Choose a planet">
+    <header class="topbar">
+      <div>
+        <p class="topbar__greeting text-muted" id="greeting"></p>
+        <h1 class="topbar__title">Planet Poems</h1>
+        <p class="topbar__subtitle text-muted" lang="fa" dir="rtl">شعر و ستاره</p>
+      </div>
+      <button type="button" class="chip" id="keepsakes-open-top" aria-haspopup="dialog" aria-label="Open your keepsakes">
+        <span class="chip__icon" data-star-icon="#ff5c93"></span>Keepsakes<span class="badge" data-keepsake-badge hidden>0</span>
+      </button>
+    </header>
+
+    <button type="button" class="today-card" id="today-card">
+      <span class="today-card__dot" aria-hidden="true"></span>
+      <span class="today-card__text">
+        <span class="text-muted">Today's poem</span>
+        <span class="today-card__title" id="today-title"></span>
+        <span class="today-card__meta" id="today-meta"></span>
+      </span>
+      <span class="today-card__go">Read</span>
+    </button>
+
+    <div class="map" id="solar-map" role="group" aria-label="The solar system. Tap a planet to see its poems."></div>
+
+    <section class="destination card" id="destination" aria-live="polite"></section>
+
+    <p class="fine-print">The Persian verses are classical and in the public domain. The English renderings are my own, a little free, and some lines (Khayyam's especially) circulate in slightly different versions.</p>
+  </section>
+
+  <!-- Screen 2: a poem. -->
+  <section class="screen" id="screen-poem" tabindex="-1" aria-label="A poem" hidden>
+    <div class="toolbar">
+      <button type="button" class="chip" id="back-to-map" aria-label="Back to the map">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>Map
+      </button>
+      <div class="segmented" id="language-switch" role="group" aria-label="Language">
+        <button type="button" data-language="fa" lang="fa" aria-pressed="false">فارسی</button>
+        <button type="button" data-language="both" aria-pressed="true">Both</button>
+        <button type="button" data-language="en" aria-pressed="false">En</button>
+      </div>
+    </div>
+
+    <div class="poem-header">
+      <canvas class="sprite poem-header__sprite" id="poem-sprite" width="24" height="24" role="img" aria-label="A little smiling planet"></canvas>
+      <div>
+        <h2 class="poem-header__name" id="poem-planet-name"></h2>
+        <p class="text-muted" id="poem-planet-mood"></p>
+      </div>
+    </div>
+
+    <div class="poem-stage" id="poem-stage" data-language="both" aria-live="polite"></div>
+
+    <p class="fine-print fine-print--end">The Persian verses are classical and in the public domain. The English renderings are my own, a little free, and some lines (Khayyam's especially) circulate in slightly different versions.</p>
+  </section>
+
+</main>
+
+<nav class="dock" id="dock" aria-label="Poem controls" hidden>
+  <div class="dock__row">
+    <button type="button" class="dock__btn" id="dock-prev" aria-label="Previous poem">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>Prev
+    </button>
+    <button type="button" class="dock__btn dock__btn--heart" id="dock-keep" aria-pressed="false" aria-label="Keep this poem in your keepsakes">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C5 15.5 2 12 2 8.2 2 5.2 4.3 3 7 3c2 0 3.9 1.1 5 3 1.1-1.9 3-3 5-3 2.7 0 5 2.2 5 5.2 0 3.8-3 7.3-10 12.8Z"/></svg>Keep
+    </button>
+    <button type="button" class="dock__btn" id="dock-keepsakes" aria-haspopup="dialog" aria-label="Open your keepsakes">
+      <span class="dock__star" data-star-icon="#e5487b"></span>Keepsakes<span class="badge" data-keepsake-badge hidden>0</span>
+    </button>
+    <button type="button" class="dock__btn dock__btn--primary" id="dock-next" aria-label="Next poem">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>Next
+    </button>
+  </div>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="keepsakes" id="keepsakes" role="dialog" aria-modal="true" aria-labelledby="keepsakes-title" hidden>
+  <div class="keepsakes__sheet card">
+    <div class="keepsakes__bar">
+      <h2 id="keepsakes-title">Keepsakes</h2>
+      <button type="button" class="icon-btn" id="keepsakes-close" aria-label="Close keepsakes">&times;</button>
+    </div>
+    <div class="keepsakes__body">
+      <svg class="constellation" id="constellation" viewBox="0 0 288 200" aria-hidden="true"></svg>
+      <p class="keepsakes__note text-muted" id="keepsakes-note"></p>
+      <ul class="keepsakes__list" id="keepsakes-list"></ul>
+    </div>
+  </div>
+</div>
+
+<noscript><p style="padding:1rem;text-align:center">Planet Poems needs JavaScript to show its poems.</p></noscript>
+
+<script src="assets/app.f90ed45318.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "planet-poems",
+  "version": "1.0.0",
+  "description": "Classic Persian poems among the planets: a small, dependency-free web app.",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "build:site": "node build.js --site",
+    "test": "node test/run.js && node test/smoke.js && node test/fonts.test.js && node test/site.test.js",
+    "check": "npm test && node build.js",
+    "docker:build": "docker build -t planet-poems .",
+    "docker:run": "docker run --rm -p 8080:8080 planet-poems"
+  }
+}

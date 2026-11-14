@@ -1,0 +1,211 @@
+/* Components: building blocks shared by every screen. */
+
+/* ---------- card ---------- */
+.card {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* ---------- chip (pill button) ---------- */
+.chip {
+  position: relative;
+  min-height: 46px;
+  min-width: 46px;
+  padding: 0 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-line);
+  box-shadow: var(--shadow-soft);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform var(--dur-fast) ease, border-color 0.2s ease;
+}
+.chip:hover { border-color: var(--color-pink); }
+.chip:active { transform: scale(0.96); }
+.chip svg { width: 20px; height: 20px; }
+.chip__icon svg { shape-rendering: crispEdges; }
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-blush);
+  color: var(--color-ink);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* ---------- badge ---------- */
+.badge {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 22px;
+  text-align: center;
+}
+
+/* ---------- segmented control (language) ---------- */
+.segmented {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-line);
+  box-shadow: var(--shadow-soft);
+}
+.segmented button {
+  min-width: 56px;
+  min-height: 40px;
+  padding: 0 0.85rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.segmented button[lang="fa"] { font-family: var(--font-fa); font-weight: 700; font-size: 0.95rem; }
+.segmented button[aria-pressed="true"] { background: var(--color-pink); color: var(--color-ink); font-weight: 600; }
+
+/* ---------- today's poem card ---------- */
+.today-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 6px 0 0 var(--color-pink), var(--shadow-card);
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--dur-fast) ease;
+}
+.today-card:active { transform: scale(0.98); }
+.today-card__dot {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-pink-bright);
+  animation: pulse 2.4s ease-out infinite;
+}
+.today-card__text { flex: 1; min-width: 0; }
+.today-card__text > * { display: block; }
+.today-card__text > .text-muted { font-size: 0.88rem; font-weight: 500; }
+.today-card__title { font-size: 1.25rem; font-weight: 600; line-height: 1.2; }
+.today-card__meta { font-size: 0.92rem; color: var(--color-ink-muted); }
+.today-card__go {
+  flex: none;
+  padding: 0.4rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-pink);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ---------- dock (poem controls) ---------- */
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-dock);
+  display: flex;
+  justify-content: center;
+  padding: 26px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(rgba(255, 243, 246, 0), rgba(255, 243, 246, 0.96) 60%);
+  pointer-events: none;
+}
+.dock__row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: min(100%, var(--content-width));
+  pointer-events: auto;
+}
+.dock__btn {
+  position: relative;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 1.5px solid var(--color-line);
+  border-radius: 22px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lift);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform var(--dur-fast) ease, border-color 0.2s ease;
+}
+.dock__btn:hover { border-color: var(--color-pink); }
+.dock__btn:active { transform: scale(0.94); }
+.dock__btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.dock__btn--primary { background: var(--color-pink); border-color: var(--color-pink); font-weight: 600; }
+.dock__btn--heart[aria-pressed="true"] { border-color: var(--color-pink-bright); color: var(--color-pink-deep); }
+.dock__btn--heart[aria-pressed="true"] svg { fill: var(--color-pink-bright); stroke: var(--color-pink-bright); }
+.dock__star svg { width: 24px; height: 24px; stroke: none; shape-rendering: crispEdges; }
+.dock__btn.is-pinging .dock__star svg { animation: ping 0.6s var(--ease-pop); }
+.dock .badge { position: absolute; top: -9px; right: -6px; }
+
+/* tiny confetti dots that burst from the Keep button */
+.confetti {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: confetti 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(104px + env(safe-area-inset-bottom, 0px));
+  z-index: var(--z-toast);
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+  box-shadow: 0 8px 20px rgba(91, 42, 63, 0.3);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 10px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- launch bloom (the soft pink flash between screens) ---------- */
+.bloom {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-bloom);
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 45%, #ffc2d6 0, rgba(255, 214, 228, 0.92) 32%, transparent 64%);
+}
+.bloom.is-playing { animation: bloom 0.7s cubic-bezier(0.4, 0, 0.3, 1); }

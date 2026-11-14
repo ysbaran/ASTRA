@@ -1,0 +1,36 @@
+/* Motion: every keyframe lives here, plus the reduced-motion overrides.
+   Components refer to these by name. */
+
+@keyframes screen-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes panel-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(0.6); transform-origin: left center; } to { opacity: 1; transform: none; } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 92, 147, 0.4); } 100% { box-shadow: 0 0 0 14px rgba(255, 92, 147, 0); } }
+@keyframes float { 50% { transform: translateY(-4px); } }
+@keyframes hop { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-9px) scale(1.14); } 100% { transform: none; } }
+@keyframes spin { to { rotate: 360deg; } }
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+@keyframes orbit-in { from { opacity: 0; transform: translate(-50%, -50%) scale(0.6); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes node-in { from { opacity: 0; transform: translate(-50%, -50%) scale(0.3); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes fly {
+  0% { left: -6%; top: 98%; opacity: 0; }
+  3% { opacity: 1; }
+  55% { left: 102%; top: 2%; opacity: 1; }
+  56%, 100% { left: 102%; top: 2%; opacity: 0; }
+}
+@keyframes word-in { to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes blink { 50% { opacity: 0.3; } }
+@keyframes twinkle { 50% { opacity: 0.35; } }
+@keyframes ping { 40% { transform: scale(1.5) rotate(12deg); } }
+@keyframes confetti { to { opacity: 0; transform: translate(var(--dx), var(--dy)); } }
+@keyframes bloom { 0% { opacity: 0; transform: scale(0.3); } 40% { opacity: 1; } 100% { opacity: 0; transform: scale(2.2); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit, .orbit__runner, .planet-node, .planet-node__sprite, .planet-node::before, .planet-node__today,
+  .today-card__dot, .poem-header__sprite, .destination__sprite, .destination__bubble, .poem-card__end i,
+  .constellation__shape, .dock__star svg, .bloom, .rocket { animation: none !important; }
+  .rocket { display: none; }
+  .screen, .poem-card, .destination, .keepsakes__sheet { animation: none; }
+  .couplet, .couplet.is-visible { opacity: 1; transform: none; transition: none; }
+  .couplet .word { animation: none; opacity: 1; transform: none; filter: none; }
+  .toast { transition: none; }
+}

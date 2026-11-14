@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
     ports:
       # BIND_ADDRESS=127.0.0.1 keeps it private to the server (use this behind a reverse proxy).
-      - "${BIND_ADDRESS:-0.0.0.0}:${PORT:-8080}:8080"
+      - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-8008}:8080"
     # Hardening: nothing inside the container needs to write to disk except /tmp.
     read_only: true
     tmpfs:
